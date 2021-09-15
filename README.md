@@ -1,3 +1,8 @@
+## Link to HOST application
+
+- Main link to main repsitory [adam-pietka](https://github.com/adam-pietka)
+- Repository to HOST [SimpleLoanApplication](https://github.com/adam-pietka/TakeLoanApp)
+
 # Simple Take a Loan apps
 
 This project can be used as a starting point to create your own Vaadin application with Spring Boot.
