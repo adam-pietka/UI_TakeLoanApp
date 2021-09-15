@@ -2,15 +2,20 @@ package com.example.application.views.loanapplication;
 
 import java.util.Optional;
 
+import com.example.application.data.dto.CustomerDTO;
 import com.example.application.data.entity.Customer;
+import com.example.application.data.service.RestClientService;
 import com.example.application.data.service.SamplePersonService;
 
+import com.example.application.views.customers.CustomersView;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
@@ -19,18 +24,17 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.artur.helpers.CrudServiceDataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.PageTitle;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.icon.Icon;
 
@@ -39,73 +43,76 @@ import com.vaadin.flow.component.icon.Icon;
 @Uses(Icon.class)
 public class LoanapplicationView extends Div implements BeforeEnterObserver {
 
+
     private final String SAMPLEPERSON_ID = "samplePersonID";
-    private final String SAMPLEPERSON_EDIT_ROUTE_TEMPLATE = "LoanApp/%d/edit";
-
-    private Grid<Customer> grid = new Grid<>(Customer.class, false);
-
-    private TextField firstName;
-    private TextField lastName;
-    private TextField email;
-    private TextField phone;
-    private DatePicker dateOfBirth;
-    private TextField occupation;
-    private Checkbox important;
+    private final String SAMPLEPERSON_EDIT_ROUTE_TEMPLATE = "customers/%d/edit";
+    private final TextField filtrByAppId = new TextField();
+    private final TextField filtrByCustomerId = new TextField();
+    private final TextField filtrByLoanId = new TextField();
+    final Grid<JsonNode> postsGrid = new Grid<JsonNode>();
+    final Button fetchCustomers = new Button("Fetch all Loan Applications");
 
     private Button cancel = new Button("Cancel");
     private Button save = new Button("Save");
-
     private BeanValidationBinder<Customer> binder;
-
     private Customer customer;
-
+    private CustomerDTO customerDTO;
     private SamplePersonService samplePersonService;
 
-    public LoanapplicationView(@Autowired SamplePersonService samplePersonService) {
+    public LoanapplicationView(@Autowired RestClientService service) {
         this.samplePersonService = samplePersonService;
-        addClassNames("loanapplication-view", "flex", "flex-col", "h-full");
+        addClassNames("customers-view", "flex", "flex-col", "h-full");
         // Create UI
+        // TOP filter area
+        HorizontalLayout topFieldsLoyot = new HorizontalLayout();
+        topFieldsLoyot.setSpacing(true);
+        topFieldsLoyot.setPadding(true);
+        createTopArea(topFieldsLoyot);
+        // button
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.setClassName("w-full flex-wrap bg-contrast-5 py-s px-l");
+        buttonLayout.setSpacing(true);
+        buttonLayout.addClassName("button-layout");
+
+        fetchCustomers.addClickListener( e -> postsGrid.setItems(service.getAllLoansApplications()));
+        fetchCustomers.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        buttonLayout.add(fetchCustomers);
+        add(buttonLayout);
+
         SplitLayout splitLayout = new SplitLayout();
         splitLayout.setSizeFull();
-
         createGridLayout(splitLayout);
         createEditorLayout(splitLayout);
-
         add(splitLayout);
 
         // Configure Grid
-        grid.addColumn("firstName").setAutoWidth(true);
-        grid.addColumn("lastName").setAutoWidth(true);
-        grid.addColumn("email").setAutoWidth(true);
-        grid.addColumn("phone").setAutoWidth(true);
-        grid.addColumn("dateOfBirth").setAutoWidth(true);
-        grid.addColumn("occupation").setAutoWidth(true);
-        TemplateRenderer<Customer> importantRenderer = TemplateRenderer.<Customer>of(
-                "<iron-icon hidden='[[!item.important]]' icon='vaadin:check' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: var(--lumo-primary-text-color);'></iron-icon><iron-icon hidden='[[item.important]]' icon='vaadin:minus' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: var(--lumo-disabled-text-color);'></iron-icon>")
-                .withProperty("important", Customer::isImportant);
-        grid.addColumn(importantRenderer).setHeader("Important").setAutoWidth(true);
+        postsGrid.addColumn(node -> node.get("id")).setHeader("Id").setTextAlign(ColumnTextAlign.END);
+        postsGrid.addColumn(node -> node.get("customerId")).setHeader("cus. id");
+        postsGrid.addColumn(node -> node.get("loansId")).setHeader("Loan id");
+        postsGrid.addColumn(node -> node.get("incomeAmount")).setHeader("Income amount");
+        postsGrid.addColumn(node -> node.get("employerName")).setHeader("Employer Name");
+        postsGrid.addColumn(node -> node.get("employerPhoneNumber")).setHeader("Employer phone");
+        postsGrid.addColumn(node -> node.get("otherLiabilities")).setHeader("Other liabilities");
+        postsGrid.addColumn(node -> node.get("loanAmount")).setHeader("Loan amount");
+        postsGrid.addColumn(node -> node.get("repaymentPeriodInMonth")).setHeader("Period");
+        postsGrid.addColumn(node -> node.get("isApplicationAccepted")).setHeader("Is accepted");
+        postsGrid.addColumn(node -> node.get("dateOfPayout")).setHeader("Date Of payout");
 
-        grid.setDataProvider(new CrudServiceDataProvider<>(samplePersonService));
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
-        grid.setHeightFull();
+        postsGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        postsGrid.setHeightFull();
 
         // when a row is selected or deselected, populate form
-        grid.asSingleSelect().addValueChangeListener(event -> {
+        postsGrid.asSingleSelect().addValueChangeListener(event -> {
             if (event.getValue() != null) {
-                UI.getCurrent().navigate(String.format(SAMPLEPERSON_EDIT_ROUTE_TEMPLATE, event.getValue().getId()));
+//                UI.getCurrent().navigate(String.format(SAMPLEPERSON_EDIT_ROUTE_TEMPLATE, event.getValue().get());
             } else {
                 clearForm();
-                UI.getCurrent().navigate(LoanapplicationView.class);
+                UI.getCurrent().navigate(CustomersView.class);
             }
         });
 
         // Configure Form
-        binder = new BeanValidationBinder<>(Customer.class);
-
         // Bind fields. This where you'd define e.g. validation rules
-
-        binder.bindInstanceFields(this);
-
         cancel.addClickListener(e -> {
             clearForm();
             refreshGrid();
@@ -122,12 +129,11 @@ public class LoanapplicationView extends Div implements BeforeEnterObserver {
                 clearForm();
                 refreshGrid();
                 Notification.show("SamplePerson details stored.");
-                UI.getCurrent().navigate(LoanapplicationView.class);
+                UI.getCurrent().navigate(CustomersView.class);
             } catch (ValidationException validationException) {
                 Notification.show("An exception happened while trying to store the samplePerson details.");
             }
         });
-
     }
 
     @Override
@@ -144,9 +150,28 @@ public class LoanapplicationView extends Div implements BeforeEnterObserver {
                 // when a row is selected but the data is no longer available,
                 // refresh grid
                 refreshGrid();
-                event.forwardTo(LoanapplicationView.class);
+                event.forwardTo(CustomersView.class);
             }
         }
+    }
+
+    private void createTopArea( HorizontalLayout horizontalLayout){
+        filtrByAppId.setPlaceholder("Filter by cust id");
+        filtrByAppId.setClearButtonVisible(true);
+        filtrByAppId.setValueChangeMode(ValueChangeMode.EAGER);
+//        filtrByName.addValueChangeListener(e -> update());
+
+        filtrByCustomerId.setPlaceholder("Filter by customer ID");
+        filtrByCustomerId.setClearButtonVisible(true);
+        filtrByCustomerId.setValueChangeMode(ValueChangeMode.EAGER);
+
+        filtrByLoanId.setPlaceholder("Filter by loan ID");
+        filtrByLoanId.setClearButtonVisible(true);
+        filtrByLoanId.setValueChangeMode(ValueChangeMode.EAGER);
+
+        horizontalLayout.add(filtrByAppId, filtrByCustomerId, filtrByLoanId);
+        add(horizontalLayout);
+
     }
 
     private void createEditorLayout(SplitLayout splitLayout) {
@@ -159,13 +184,13 @@ public class LoanapplicationView extends Div implements BeforeEnterObserver {
         editorLayoutDiv.add(editorDiv);
 
         FormLayout formLayout = new FormLayout();
-        firstName = new TextField("First Name");
-        lastName = new TextField("Last Name");
-        email = new TextField("Email");
-        phone = new TextField("Phone");
-        dateOfBirth = new DatePicker("Date Of Birth");
-        occupation = new TextField("Occupation");
-        important = new Checkbox("Important");
+        TextField firstName = new TextField("First Name");
+        TextField lastName = new TextField("Last Name");
+        TextField email = new TextField("Email");
+        TextField phone = new TextField("Phone");
+        DatePicker dateOfBirth = new DatePicker("Date Of Birth");
+        TextField occupation = new TextField("Occupation");
+        Checkbox important = new Checkbox("Important");
         important.getStyle().set("padding-top", "var(--lumo-space-m)");
         Component[] fields = new Component[]{firstName, lastName, email, phone, dateOfBirth, occupation, important};
 
@@ -194,12 +219,12 @@ public class LoanapplicationView extends Div implements BeforeEnterObserver {
         wrapper.setId("grid-wrapper");
         wrapper.setWidthFull();
         splitLayout.addToPrimary(wrapper);
-        wrapper.add(grid);
+        wrapper.add(postsGrid);
     }
 
     private void refreshGrid() {
-        grid.select(null);
-        grid.getDataProvider().refreshAll();
+        postsGrid.select(null);
+        postsGrid.getDataProvider().refreshAll();
     }
 
     private void clearForm() {

@@ -1,7 +1,6 @@
 package com.example.application.data.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.vaadin.flow.data.provider.DataProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -17,89 +16,27 @@ public class RestClientService implements Serializable {
 	@Value("${server.port}")
 	private String serverPort;
 
-	/**
-	 * Returns parsed {@link CommentDTO} objects from the REST service.
-	 *
-	 * Useful when the response data has a known structure.
-	 */
-//	public List<CommentDTO> getAllComments() {
-//
-//		System.out.println("Fetching all Comment objects through REST..");
-//
-//		// Fetch from 3rd party API; configure fetch
-//		final RequestHeadersSpec<?> spec = WebClient.create().get()
-//				.uri("https://jsonplaceholder.typicode.com/comments");
-//
-//		// do fetch and map result
-//		final List<CommentDTO> comments = spec.retrieve().toEntityList(CommentDTO.class).block().getBody();
-//
-//		System.out.println(String.format("...received %d items.", comments.size()));
-//
-//		return comments;
-//	}
-
-	/**
-	 * Returns non-parsed JSON response objects from the REST service.
-	 *
-	 * Useful when you don't want to create a DTO class, or the response data has a
-	 * dynamic structure.
-	 */
 	public List<JsonNode> getAllCustomers() {
 
-		System.out.println("Fetching all Post objects through REST..");
-
-		// Fetch from 3rd party API; configure fetch
-//		final RequestHeadersSpec<?> spec = WebClient.create().get().uri("https://jsonplaceholder.typicode.com/posts");
-		final RequestHeadersSpec<?> spec = WebClient.create().get().uri("localhost:8085//takeLoan/customers/getAllCustomes");
-//		http://localhost:8085//takeLoan/customers/getAllCustomes
+		System.out.println("Fetching all Customers objects through REST..");
+		final RequestHeadersSpec<?> spec = WebClient.create().get().uri("localhost:8085/takeLoan/customers/getAllCustomes");
 
 		// do fetch and map result
-		final List<JsonNode> posts = spec.retrieve().toEntityList(JsonNode.class).block().getBody();
+		final List<JsonNode> customers = spec.retrieve().toEntityList(JsonNode.class).block().getBody();
+		System.out.println(String.format("...received %d items.", customers.size()));
 
-		System.out.println(String.format("...received %d items.", posts.size()));
-
-		return posts;
-
+		return customers;
 	}
 
-	/**
-	 * Fetches the specified amount of data items starting from index 'offset' from
-	 * the REST API.
-	 */
-//	public Stream<DataDTO> fetchData(int count, int offset) {
-//
-//		System.out.println(String.format("Fetching partial data set %d through %d...", offset, offset + count));
-//
-//		// We use a local provider for this bigger data set.
-//		// The API has two methods, 'data' and 'count'.
-//
-//		// Other than that, this method is similar to #getAllComments().
-//		final String url = String.format("http://localhost:" + serverPort + "/data?count=%d&offset=%d", count, offset);
-//
-//		final RequestHeadersSpec<?> spec = WebClient.create().get().uri(url);
-//		final List<DataDTO> posts = spec.retrieve().toEntityList(DataDTO.class).block().getBody();
-//
-//		System.out.println(String.format("...received %d items.", posts.size()));
-//		return posts.stream();
-//	}
+	public List<JsonNode> getAllLoansApplications() {
 
-	/**
-	 * Fetches the total number of items available through the REST API
-	 */
-//	public int fetchCount() {
-//
-//		System.out.println("fetching count...");
-//
-//		// We use a local provider for this bigger data set.
-//		// The API has two methods, 'data' and 'count'.
-//		final String url = String.format("http://localhost:" + serverPort + "/count");
-//
-//		final RequestHeadersSpec<?> spec = WebClient.create().get().uri(url);
-//		final Integer response = spec.retrieve().toEntity(Integer.class).block().getBody();
-//
-//		System.out.println("...count is " + response);
-//		return response;
-//
-//	}
+		System.out.println("Fetching all LoansApplications objects through REST..");
+		final RequestHeadersSpec<?> spec = WebClient.create().get().uri("localhost:8085/takeLoan/loanApplist/getAllLoansApp");
 
+		// do fetch and map result
+		final List<JsonNode> customers = spec.retrieve().toEntityList(JsonNode.class).block().getBody();
+		System.out.println(String.format("...received %d items.", customers.size()));
+
+		return customers;
+	}
 }

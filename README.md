@@ -1,3 +1,9 @@
+## General information
+- UI is almoset not usable, there is still a lot of work with it
+- to start application demandet is start at localhost both layers, FN, and HOST, in file application.properties there are settup difference port, so it's possible to run without any changes
+- demandet is also to set MySql db at local and change settup in  application.properties file on HOST side
+
+
 ## Link to HOST application
 
 - Main link to main repsitory [adam-pietka](https://github.com/adam-pietka)

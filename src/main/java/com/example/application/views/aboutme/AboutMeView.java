@@ -1,5 +1,6 @@
 package com.example.application.views.aboutme;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
@@ -33,14 +34,13 @@ public class AboutMeView extends HorizontalLayout  {
         Paragraph paragraph = new Paragraph(
                 "\nPodziekowania dla Kodilla, że udało im się z kompletnie 'zielonej' osoby " +
                 "\npo wielu miesiącach uzyskać osobę która chociaż trochę wie jak się programuje." +
-                        "\n przepraszam że z frontend praktycznie nie działa, ale zaczołem dzisiaj o godznie 18:00" +
-                        "\n wiec.... to nie było wiele czasu na jego wykonanie." +
-                        "\npo przerwie (na pewno conajmniej kilku dniowej, podejmę koleje próby dopracowania projektu" +
-                        "\nnie będę wynieniał czego prakuje, bo to była by dość długa lista. " +
-                        "\nDlatego skupię się na tym że osoba praktycznie bez doświadczenia (czyt. ja) napisała" +
-                        "\naplikację w któej działają usługid, zapisuje dane do bazy/usuwa/modyfikuje/ i ma grontend" +
-                        "\nktóry potafi pobrać dane z bazy i wyświetlić w frmie tabeli, jak na mnie to naprawdę sporo. " +
-                        "\n\n");
+                        "\n\nprzepraszam że z frontend praktycznie nie działa, ale zaczołem dzisiaj o godznie 18:00" +
+                        "\n\nwiec.... to nie było wiele czasu na jego wykonanie." +
+                        "\n\npo przerwie (na pewno conajmniej kilku dniowej, podejmę koleje próby dopracowania projektu" +
+                        "\n\nnie będę wynieniał czego prakuje, bo to była by dość długa lista. " +
+                        "\n\nDlatego skupię się na tym że osoba praktycznie bez doświadczenia (czyt. ja) napisała" +
+                        "\n\naplikację w któej działają usługid, zapisuje dane do bazy/usuwa/modyfikuje/ i ma grontend" +
+                        "\n\nktóry potafi pobrać dane z bazy i wyświetlić w frmie tabeli, jak na mnie to naprawdę sporo.\n\n\n");
         Paragraph signature = new Paragraph("Adam Piętka");
 
         setSizeFull();

@@ -47,19 +47,11 @@ public class CustomersView extends Div implements BeforeEnterObserver {
     private final String SAMPLEPERSON_ID = "samplePersonID";
     private final String SAMPLEPERSON_EDIT_ROUTE_TEMPLATE = "customers/%d/edit";
     private final TextField filtrByName = new TextField();
-    private TextField filtrBySurname = new TextField();
-    private TextField filtrByPesel = new TextField();
-    private TextField filtrByIdNumber = new TextField();
+    private final TextField filtrBySurname = new TextField();
+    private final TextField filtrByPesel = new TextField();
+    private final TextField filtrByIdNumber = new TextField();
     final Grid<JsonNode> postsGrid = new Grid<JsonNode>();
     final Button fetchCustomers = new Button("Fetch all customers");
-
-    private TextField firstName;
-    private TextField lastName;
-    private TextField email;
-    private TextField phone;
-    private DatePicker dateOfBirth;
-    private TextField occupation;
-    private Checkbox important;
 
     private Button cancel = new Button("Cancel");
     private Button save = new Button("Save");
@@ -199,13 +191,13 @@ public class CustomersView extends Div implements BeforeEnterObserver {
         editorLayoutDiv.add(editorDiv);
 
         FormLayout formLayout = new FormLayout();
-        firstName = new TextField("First Name");
-        lastName = new TextField("Last Name");
-        email = new TextField("Email");
-        phone = new TextField("Phone");
-        dateOfBirth = new DatePicker("Date Of Birth");
-        occupation = new TextField("Occupation");
-        important = new Checkbox("Important");
+        TextField firstName = new TextField("First Name");
+        TextField lastName = new TextField("Last Name");
+        TextField email = new TextField("Email");
+        TextField phone = new TextField("Phone");
+        DatePicker dateOfBirth = new DatePicker("Date Of Birth");
+        TextField occupation = new TextField("Occupation");
+        Checkbox important = new Checkbox("Important");
         important.getStyle().set("padding-top", "var(--lumo-space-m)");
         Component[] fields = new Component[]{firstName, lastName, email, phone, dateOfBirth, occupation, important};
 
