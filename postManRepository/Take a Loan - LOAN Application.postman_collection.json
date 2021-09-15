@@ -1,0 +1,222 @@
+{
+	"info": {
+		"_postman_id": "4b77791f-ed2d-4819-8d44-cb294ebef4ef",
+		"name": "Take a Loan - LOAN Application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getLoanAppByID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/takeLoan/loanApplist/findLoanAppById?loanAppId=1",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"loanApplist",
+						"findLoanAppById"
+					],
+					"query": [
+						{
+							"key": "loanAppId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get All Loan ApplicationList",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/takeLoan/loanApplist/getAllLoansApp",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"loanApplist",
+						"getAllLoansApp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE Loan APP",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n        \"id\": 6,\r\n        \"customerId\": 2,\r\n        \"loansId\": 15,\r\n        \"employmentForm\": \"SELF\",\r\n        \"incomeAmount\": 35332.01,\r\n        \"employerName\": \"SDC inc. Updated   5565\",\r\n        \"employerNipNumber\": \"858-858-85-96\",\r\n        \"employerAddress\": \"employerAddress\",\r\n        \"employerPhoneNumber\": \"employerPhoneNumber\",\r\n        \"otherLiabilities\": 1400.00,\r\n        \"loanAmount\": 11000.00,\r\n        \"repaymentPeriodInMonth\": 60,\r\n        \"dateOfRegistrationOfApplication\": \"2021-09-12\",\r\n        \"dataOfClosedOfApplication\": \"2021-09-15\",\r\n        \"accountNumberForPaymentOfLoan\": \"PL94344339919401057202627604\",\r\n        \"dateOfPayout\": \"2021-09-13\",\r\n        \"closed\": false,\r\n        \"payouts\": false,\r\n        \"applicationAccepted\": true\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/takeLoan/loanApplist/updateLoanApp",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"loanApplist",
+						"updateLoanApp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE Loan APP short",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 16,\r\n        \"customerId\": 1,\r\n        \"loansId\": 14,\r\n        \"employmentForm\": \"SELF\",\r\n        \"incomeAmount\": 7532.01,\r\n        \"employerName\": \"SDC inc.\",\r\n        \"employerNipNumber\": \"employerNipNumber\",\r\n        \"employerAddress\": \"employerAddress\",\r\n        \"employerPhoneNumber\": \"employerPhoneNumber\",\r\n        \"otherLiabilities\": 400.00,\r\n        \"loanAmount\": 12500.00,\r\n        \"repaymentPeriodInMonth\": 48,\r\n        \"dateOfRegistrationOfApplication\": \"2021-09-14\",\r\n        \"dataOfClosedOfApplication\": null,\r\n        \"accountNumberForPaymentOfLoan\": \"PL94344339919401057202627604\",\r\n        \"dateOfPayout\": null,\r\n        \"closed\": false,\r\n        \"payoutsDone\": true,\r\n        \"applicationAccepted\": true\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/takeLoan/loanApplist/updateLoanApp",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"loanApplist",
+						"updateLoanApp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DEL LOAN APP",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/takeLoan/loanApplist/removeLoanAppFromDB",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"loanApplist",
+						"removeLoanAppFromDB"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register LoanApp",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n    \"customerId\": 3,\r\n    \"employmentForm\": \"employmentForm\",\r\n    \"incomeAmount\": \"52.3\",\r\n    \"employerName\": \"employerName\",\r\n    \"employerNipNumber\": \"employerNipNumber\",\r\n    \"employerAddress\": \"employerAddress\",\r\n    \"employerPhoneNumber\": \"employerPhoneNumber\",\r\n    \"otherLiabilities\": \"5555658505\",\r\n    \"loanAmount\": \"455\",\r\n    \"repaymentPeriodInMonth\": 24,\r\n    \"isApplicationAccepted\": false,\r\n    \"dateOfRegistrationOfApplication\": \"2020-08-05\",\r\n    \"dataOfClosedOfApplication\": \"2022-05-08\",\r\n    \"accountNumberForPaymentOfLoan\": \"PL 85 0000 accountNumberForPaymentOfLoan\",\r\n    \"isPayouts\": false,\r\n    \"dateOfPayout\": \"2020-12-01\",\r\n    \"isClosed\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/takeLoan/loanApplist/registerLoanApplication",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"loanApplist",
+						"registerLoanApplication"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register LoanApp Lessa Date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n    \"customerId\": 1,\r\n    \"employmentForm\": \"SELF\",\r\n    \"incomeAmount\": 7532.01,\r\n    \"employerName\": \"SDC inc.\",\r\n    \"employerNipNumber\": \"employerNipNumber\",\r\n    \"employerAddress\": \"employerAddress\",\r\n    \"employerPhoneNumber\": \"employerPhoneNumber\",\r\n    \"otherLiabilities\": 400,\r\n    \"loanAmount\": 12500.00,\r\n    \"repaymentPeriodInMonth\": 48,\r\n    \"accountNumberForPaymentOfLoan\": \"PL94344339919401057202627604\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/takeLoan/loanApplist/registerLoanApplication",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"loanApplist",
+						"registerLoanApplication"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

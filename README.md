@@ -2,6 +2,8 @@
 - UI is almoset not usable, there is still a lot of work with it
 - to start application demandet is start at localhost both layers, FN, and HOST, in file application.properties there are settup difference port, so it's possible to run without any changes
 - demandet is also to set MySql db at local and change settup in  application.properties file on HOST side
+- in catalog 'postManRepository' there are collection to execute test in postman
+- if any additiona question im on skype adampi8060@hotmail.com
 
 
 ## Link to HOST application

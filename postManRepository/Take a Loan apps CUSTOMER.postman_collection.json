@@ -1,0 +1,225 @@
+{
+	"info": {
+		"_postman_id": "903f56fb-62c5-49e4-a0be-b5ef70efc940",
+		"name": "Take a Loan apps CUSTOMER",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/users/getUsers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"getUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCustomerByID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/takeLoan/customers/getCustomerByInternalId?customerId=371",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"customers",
+						"getCustomerByInternalId"
+					],
+					"query": [
+						{
+							"key": "customerId",
+							"value": "371"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCustomerByPESEL",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/takeLoan/customers/getCustomerByPesel?peselNumber",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"customers",
+						"getCustomerByPesel"
+					],
+					"query": [
+						{
+							"key": "peselNumber",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCustomerByPESEL Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/takeLoan/customers/getCustomerByPesel",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"customers",
+						"getCustomerByPesel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get All Customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/takeLoan/customers/getAllCustomes",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"customers",
+						"getAllCustomes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT UPDATE customer",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 2,\r\n        \"name\": \"Krzysiak UPDATE\",\r\n        \"surname\": \"Turzynska UPDATE\",\r\n        \"phoneNumber\": \"+48 777-888-744\",\r\n        \"addressStreet\": \"street kolobrzeska\",\r\n        \"addressNumber\": \"85/858 C\",\r\n        \"addressPostCode\": \"00-850\",\r\n        \"addressCity\": \"Poznan\",\r\n        \"peselNumber\": \"6505261937\",\r\n        \"nipNumber\": \"\",\r\n        \"idType\": \"PASSPORT\",\r\n        \"idNumber\": \"aa85858\",\r\n        \"mailAddress\": \"adi2-20@wp.pl\",\r\n        \"registrationDate\": \"2021-09-12\",\r\n        \"closedDate\": null,\r\n        \"loansId\": [],\r\n        \"loansApplicationId\": [],\r\n        \"active\": true\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/takeLoan/customers/updateCustomer",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"customers",
+						"updateCustomer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DEL customer",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/takeLoan/customers/removeCustomerFromDB?customerId=10",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"customers",
+						"removeCustomerFromDB"
+					],
+					"query": [
+						{
+							"key": "customerId",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"name\": \"Krzysiak\",\r\n\t\"surname\": \"Turzynska\",\r\n\t\"phoneNumber\": \"+48 777-888-744\",\r\n\t\"addressStreet\": \"street kolobrzeska\",\r\n\t\"addressNumber\": \"85/858 C\",\r\n\t\"addressPostCode\": \"00-850\",\r\n\t\"addressCity\": \"Poznan\",\r\n    \"peselNumber\": \"6505261937\",\r\n    \"idType\": \"PASSPORT\",\r\n    \"idNumber\": \"aa85858\",\r\n\t\"mailAddress\": \"adi2-20@wp.pl\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/takeLoan/customers/createCustomer",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"takeLoan",
+						"customers",
+						"createCustomer"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
