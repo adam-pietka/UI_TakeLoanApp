@@ -2,15 +2,19 @@ package com.example.application.views.customers;
 
 import java.util.Optional;
 
-import com.example.application.data.entity.SamplePerson;
+import com.example.application.data.dto.CustomerDTO;
+import com.example.application.data.entity.Customer;
+import com.example.application.data.service.RestClientService;
 import com.example.application.data.service.SamplePersonService;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
@@ -19,11 +23,11 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.artur.helpers.CrudServiceDataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.PageTitle;
 import com.example.application.views.MainLayout;
@@ -31,7 +35,6 @@ import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.icon.Icon;
 
@@ -43,8 +46,12 @@ public class CustomersView extends Div implements BeforeEnterObserver {
 
     private final String SAMPLEPERSON_ID = "samplePersonID";
     private final String SAMPLEPERSON_EDIT_ROUTE_TEMPLATE = "customers/%d/edit";
-
-    private Grid<SamplePerson> grid = new Grid<>(SamplePerson.class, false);
+    private final TextField filtrByName = new TextField();
+    private TextField filtrBySurname = new TextField();
+    private TextField filtrByPesel = new TextField();
+    private TextField filtrByIdNumber = new TextField();
+    final Grid<JsonNode> postsGrid = new Grid<JsonNode>();
+    final Button fetchCustomers = new Button("Fetch all customers");
 
     private TextField firstName;
     private TextField lastName;
@@ -56,58 +63,67 @@ public class CustomersView extends Div implements BeforeEnterObserver {
 
     private Button cancel = new Button("Cancel");
     private Button save = new Button("Save");
-
-    private BeanValidationBinder<SamplePerson> binder;
-
-    private SamplePerson samplePerson;
-
+    private BeanValidationBinder<Customer> binder;
+    private Customer customer;
+    private CustomerDTO customerDTO;
     private SamplePersonService samplePersonService;
 
-    public CustomersView(@Autowired SamplePersonService samplePersonService) {
+    public CustomersView(@Autowired RestClientService service) {
         this.samplePersonService = samplePersonService;
         addClassNames("customers-view", "flex", "flex-col", "h-full");
         // Create UI
+            // TOP filter area
+        HorizontalLayout topFieldsLoyot = new HorizontalLayout();
+        topFieldsLoyot.setSpacing(true);
+        topFieldsLoyot.setPadding(true);
+        createTopArea(topFieldsLoyot);
+            // button
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.setClassName("w-full flex-wrap bg-contrast-5 py-s px-l");
+        buttonLayout.setSpacing(true);
+        buttonLayout.addClassName("button-layout");
+
+        fetchCustomers.addClickListener( e -> postsGrid.setItems(service.getAllCustomers()));
+        fetchCustomers.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        buttonLayout.add(fetchCustomers);
+        add(buttonLayout);
+
         SplitLayout splitLayout = new SplitLayout();
         splitLayout.setSizeFull();
-
         createGridLayout(splitLayout);
         createEditorLayout(splitLayout);
-
         add(splitLayout);
 
         // Configure Grid
-        grid.addColumn("firstName").setAutoWidth(true);
-        grid.addColumn("lastName").setAutoWidth(true);
-        grid.addColumn("email").setAutoWidth(true);
-        grid.addColumn("phone").setAutoWidth(true);
-        grid.addColumn("dateOfBirth").setAutoWidth(true);
-        grid.addColumn("occupation").setAutoWidth(true);
-        TemplateRenderer<SamplePerson> importantRenderer = TemplateRenderer.<SamplePerson>of(
-                "<iron-icon hidden='[[!item.important]]' icon='vaadin:check' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: var(--lumo-primary-text-color);'></iron-icon><iron-icon hidden='[[item.important]]' icon='vaadin:minus' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: var(--lumo-disabled-text-color);'></iron-icon>")
-                .withProperty("important", SamplePerson::isImportant);
-        grid.addColumn(importantRenderer).setHeader("Important").setAutoWidth(true);
+        postsGrid.addColumn(node -> node.get("id")).setHeader("Id").setTextAlign(ColumnTextAlign.END);
+        postsGrid.addColumn(node -> node.get("name")).setHeader("customer name");
+        postsGrid.addColumn(node -> node.get("surname")).setHeader("Cust surname");
+        postsGrid.addColumn(node -> node.get("phoneNumber")).setHeader("Cell phone");
+        postsGrid.addColumn(node -> node.get("addressStreet")).setHeader("Street");
+        postsGrid.addColumn(node -> node.get("addressNumber")).setHeader("no.");
+        postsGrid.addColumn(node -> node.get("addressPostCode")).setHeader("Post code");
+        postsGrid.addColumn(node -> node.get("addressCity")).setHeader("City");
+        postsGrid.addColumn(node -> node.get("peselNumber")).setHeader("PESEL");
+        postsGrid.addColumn(node -> node.get("nipNumber")).setHeader("NIP");
+        postsGrid.addColumn(node -> node.get("mailAddress")).setHeader("e-mail");
 
-        grid.setDataProvider(new CrudServiceDataProvider<>(samplePersonService));
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
-        grid.setHeightFull();
+        postsGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        postsGrid.setHeightFull();
 
         // when a row is selected or deselected, populate form
-        grid.asSingleSelect().addValueChangeListener(event -> {
+        postsGrid.asSingleSelect().addValueChangeListener(event -> {
             if (event.getValue() != null) {
-                UI.getCurrent().navigate(String.format(SAMPLEPERSON_EDIT_ROUTE_TEMPLATE, event.getValue().getId()));
+//                UI.getCurrent().navigate(String.format(SAMPLEPERSON_EDIT_ROUTE_TEMPLATE, event.getValue().get());
             } else {
                 clearForm();
                 UI.getCurrent().navigate(CustomersView.class);
             }
         });
 
+
         // Configure Form
-        binder = new BeanValidationBinder<>(SamplePerson.class);
 
         // Bind fields. This where you'd define e.g. validation rules
-
-        binder.bindInstanceFields(this);
-
         cancel.addClickListener(e -> {
             clearForm();
             refreshGrid();
@@ -115,12 +131,12 @@ public class CustomersView extends Div implements BeforeEnterObserver {
 
         save.addClickListener(e -> {
             try {
-                if (this.samplePerson == null) {
-                    this.samplePerson = new SamplePerson();
+                if (this.customer == null) {
+                    this.customer = new Customer();
                 }
-                binder.writeBean(this.samplePerson);
+                binder.writeBean(this.customer);
 
-                samplePersonService.update(this.samplePerson);
+                samplePersonService.update(this.customer);
                 clearForm();
                 refreshGrid();
                 Notification.show("SamplePerson details stored.");
@@ -129,14 +145,13 @@ public class CustomersView extends Div implements BeforeEnterObserver {
                 Notification.show("An exception happened while trying to store the samplePerson details.");
             }
         });
-
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         Optional<Integer> samplePersonId = event.getRouteParameters().getInteger(SAMPLEPERSON_ID);
         if (samplePersonId.isPresent()) {
-            Optional<SamplePerson> samplePersonFromBackend = samplePersonService.get(samplePersonId.get());
+            Optional<Customer> samplePersonFromBackend = samplePersonService.get(samplePersonId.get());
             if (samplePersonFromBackend.isPresent()) {
                 populateForm(samplePersonFromBackend.get());
             } else {
@@ -149,6 +164,29 @@ public class CustomersView extends Div implements BeforeEnterObserver {
                 event.forwardTo(CustomersView.class);
             }
         }
+    }
+
+    private void createTopArea( HorizontalLayout horizontalLayout){
+        filtrByName.setPlaceholder("Filter by name");
+        filtrByName.setClearButtonVisible(true);
+        filtrByName.setValueChangeMode(ValueChangeMode.EAGER);
+//        filtrByName.addValueChangeListener(e -> update());
+
+        filtrBySurname.setPlaceholder("Filter by surname");
+        filtrBySurname.setClearButtonVisible(true);
+        filtrBySurname.setValueChangeMode(ValueChangeMode.EAGER);
+
+        filtrByPesel.setPlaceholder("Filter by PESEL");
+        filtrByPesel.setClearButtonVisible(true);
+        filtrByPesel.setValueChangeMode(ValueChangeMode.EAGER);
+
+        filtrByIdNumber.setPlaceholder("Filter by PESEL");
+        filtrByIdNumber.setClearButtonVisible(true);
+        filtrByIdNumber.setValueChangeMode(ValueChangeMode.EAGER);
+
+        horizontalLayout.add(filtrByName, filtrBySurname, filtrByPesel, filtrByIdNumber);
+        add(horizontalLayout);
+
     }
 
     private void createEditorLayout(SplitLayout splitLayout) {
@@ -196,21 +234,21 @@ public class CustomersView extends Div implements BeforeEnterObserver {
         wrapper.setId("grid-wrapper");
         wrapper.setWidthFull();
         splitLayout.addToPrimary(wrapper);
-        wrapper.add(grid);
+        wrapper.add(postsGrid);
     }
 
     private void refreshGrid() {
-        grid.select(null);
-        grid.getDataProvider().refreshAll();
+        postsGrid.select(null);
+        postsGrid.getDataProvider().refreshAll();
     }
 
     private void clearForm() {
         populateForm(null);
     }
 
-    private void populateForm(SamplePerson value) {
-        this.samplePerson = value;
-        binder.readBean(this.samplePerson);
+    private void populateForm(Customer value) {
+        this.customer = value;
+        binder.readBean(this.customer);
 
     }
 }

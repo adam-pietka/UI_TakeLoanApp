@@ -1,6 +1,6 @@
 package com.example.application.views.cashdeposit;
 
-import com.example.application.data.entity.SamplePerson;
+import com.example.application.data.entity.Customer;
 import com.example.application.data.service.SamplePersonService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -19,8 +19,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.PageTitle;
 import com.example.application.views.MainLayout;
-import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.icon.Icon;
 
@@ -39,7 +37,7 @@ public class CashdepositView extends Div {
     private Button cancel = new Button("Cancel");
     private Button save = new Button("Save");
 
-    private Binder<SamplePerson> binder = new Binder(SamplePerson.class);
+    private Binder<Customer> binder = new Binder(Customer.class);
 
     public CashdepositView(SamplePersonService personService) {
         addClassName("cashdeposit-view");
@@ -60,7 +58,7 @@ public class CashdepositView extends Div {
     }
 
     private void clearForm() {
-        binder.setBean(new SamplePerson());
+        binder.setBean(new Customer());
     }
 
     private Component createTitle() {

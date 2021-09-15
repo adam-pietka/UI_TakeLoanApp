@@ -6,7 +6,7 @@ import com.example.application.data.AbstractEntity;
 import java.time.LocalDate;
 
 @Entity
-public class SamplePerson extends AbstractEntity {
+public class Customer extends AbstractEntity {
 
     private String firstName;
     private String lastName;

@@ -1,14 +1,13 @@
 package com.example.application.data.service;
 
-import com.example.application.data.entity.SamplePerson;
+import com.example.application.data.entity.Customer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vaadin.artur.helpers.CrudService;
-import java.time.LocalDate;
 
 @Service
-public class SamplePersonService extends CrudService<SamplePerson, Integer> {
+public class SamplePersonService extends CrudService<Customer, Integer> {
 
     private SamplePersonRepository repository;
 

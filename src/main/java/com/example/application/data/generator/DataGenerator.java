@@ -3,7 +3,7 @@ package com.example.application.data.generator;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 
 import com.example.application.data.service.SamplePersonRepository;
-import com.example.application.data.entity.SamplePerson;
+import com.example.application.data.entity.Customer;
 
 import java.time.LocalDateTime;
 
@@ -30,16 +30,16 @@ public class DataGenerator {
             logger.info("Generating demo data");
 
             logger.info("... generating 100 Sample Person entities...");
-            ExampleDataGenerator<SamplePerson> samplePersonRepositoryGenerator = new ExampleDataGenerator<>(
-                    SamplePerson.class, LocalDateTime.of(2021, 9, 15, 0, 0, 0));
-            samplePersonRepositoryGenerator.setData(SamplePerson::setId, DataType.ID);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setFirstName, DataType.FIRST_NAME);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setLastName, DataType.LAST_NAME);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setEmail, DataType.EMAIL);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setPhone, DataType.PHONE_NUMBER);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setDateOfBirth, DataType.DATE_OF_BIRTH);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setOccupation, DataType.OCCUPATION);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setImportant, DataType.BOOLEAN_10_90);
+            ExampleDataGenerator<Customer> samplePersonRepositoryGenerator = new ExampleDataGenerator<>(
+                    Customer.class, LocalDateTime.of(2021, 9, 15, 0, 0, 0));
+            samplePersonRepositoryGenerator.setData(Customer::setId, DataType.ID);
+            samplePersonRepositoryGenerator.setData(Customer::setFirstName, DataType.FIRST_NAME);
+            samplePersonRepositoryGenerator.setData(Customer::setLastName, DataType.LAST_NAME);
+            samplePersonRepositoryGenerator.setData(Customer::setEmail, DataType.EMAIL);
+            samplePersonRepositoryGenerator.setData(Customer::setPhone, DataType.PHONE_NUMBER);
+            samplePersonRepositoryGenerator.setData(Customer::setDateOfBirth, DataType.DATE_OF_BIRTH);
+            samplePersonRepositoryGenerator.setData(Customer::setOccupation, DataType.OCCUPATION);
+            samplePersonRepositoryGenerator.setData(Customer::setImportant, DataType.BOOLEAN_10_90);
             samplePersonRepository.saveAll(samplePersonRepositoryGenerator.create(100, seed));
 
             logger.info("Generated demo data");

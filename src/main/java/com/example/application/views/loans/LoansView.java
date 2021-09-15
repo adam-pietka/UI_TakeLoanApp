@@ -2,7 +2,7 @@ package com.example.application.views.loans;
 
 import java.util.Optional;
 
-import com.example.application.data.entity.SamplePerson;
+import com.example.application.data.entity.Customer;
 import com.example.application.data.service.SamplePersonService;
 
 import com.vaadin.flow.component.Component;
@@ -42,7 +42,7 @@ public class LoansView extends Div implements BeforeEnterObserver {
     private final String SAMPLEPERSON_ID = "samplePersonID";
     private final String SAMPLEPERSON_EDIT_ROUTE_TEMPLATE = "Loans/%d/edit";
 
-    private Grid<SamplePerson> grid = new Grid<>(SamplePerson.class, false);
+    private Grid<Customer> grid = new Grid<>(Customer.class, false);
 
     private TextField firstName;
     private TextField lastName;
@@ -55,9 +55,9 @@ public class LoansView extends Div implements BeforeEnterObserver {
     private Button cancel = new Button("Cancel");
     private Button save = new Button("Save");
 
-    private BeanValidationBinder<SamplePerson> binder;
+    private BeanValidationBinder<Customer> binder;
 
-    private SamplePerson samplePerson;
+    private Customer customer;
 
     private SamplePersonService samplePersonService;
 
@@ -80,9 +80,9 @@ public class LoansView extends Div implements BeforeEnterObserver {
         grid.addColumn("phone").setAutoWidth(true);
         grid.addColumn("dateOfBirth").setAutoWidth(true);
         grid.addColumn("occupation").setAutoWidth(true);
-        TemplateRenderer<SamplePerson> importantRenderer = TemplateRenderer.<SamplePerson>of(
+        TemplateRenderer<Customer> importantRenderer = TemplateRenderer.<Customer>of(
                 "<iron-icon hidden='[[!item.important]]' icon='vaadin:check' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: var(--lumo-primary-text-color);'></iron-icon><iron-icon hidden='[[item.important]]' icon='vaadin:minus' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: var(--lumo-disabled-text-color);'></iron-icon>")
-                .withProperty("important", SamplePerson::isImportant);
+                .withProperty("important", Customer::isImportant);
         grid.addColumn(importantRenderer).setHeader("Important").setAutoWidth(true);
 
         grid.setDataProvider(new CrudServiceDataProvider<>(samplePersonService));
@@ -100,7 +100,7 @@ public class LoansView extends Div implements BeforeEnterObserver {
         });
 
         // Configure Form
-        binder = new BeanValidationBinder<>(SamplePerson.class);
+        binder = new BeanValidationBinder<>(Customer.class);
 
         // Bind fields. This where you'd define e.g. validation rules
 
@@ -113,12 +113,12 @@ public class LoansView extends Div implements BeforeEnterObserver {
 
         save.addClickListener(e -> {
             try {
-                if (this.samplePerson == null) {
-                    this.samplePerson = new SamplePerson();
+                if (this.customer == null) {
+                    this.customer = new Customer();
                 }
-                binder.writeBean(this.samplePerson);
+                binder.writeBean(this.customer);
 
-                samplePersonService.update(this.samplePerson);
+                samplePersonService.update(this.customer);
                 clearForm();
                 refreshGrid();
                 Notification.show("SamplePerson details stored.");
@@ -134,7 +134,7 @@ public class LoansView extends Div implements BeforeEnterObserver {
     public void beforeEnter(BeforeEnterEvent event) {
         Optional<Integer> samplePersonId = event.getRouteParameters().getInteger(SAMPLEPERSON_ID);
         if (samplePersonId.isPresent()) {
-            Optional<SamplePerson> samplePersonFromBackend = samplePersonService.get(samplePersonId.get());
+            Optional<Customer> samplePersonFromBackend = samplePersonService.get(samplePersonId.get());
             if (samplePersonFromBackend.isPresent()) {
                 populateForm(samplePersonFromBackend.get());
             } else {
@@ -206,9 +206,9 @@ public class LoansView extends Div implements BeforeEnterObserver {
         populateForm(null);
     }
 
-    private void populateForm(SamplePerson value) {
-        this.samplePerson = value;
-        binder.readBean(this.samplePerson);
+    private void populateForm(Customer value) {
+        this.customer = value;
+        binder.readBean(this.customer);
 
     }
 }
