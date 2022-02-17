@@ -19,7 +19,7 @@ public class RestClientService implements Serializable {
 	public List<JsonNode> getAllCustomers() {
 
 		System.out.println("Fetching all Customers objects through REST..");
-		final RequestHeadersSpec<?> spec = WebClient.create().get().uri("localhost:8085/takeLoan/customers/getAllCustomes");
+		final RequestHeadersSpec<?> spec = WebClient.create().get().uri("localhost:8085/takeLoan/customers/getAllCustomers");
 
 		// do fetch and map result
 		final List<JsonNode> customers = spec.retrieve().toEntityList(JsonNode.class).block().getBody();
