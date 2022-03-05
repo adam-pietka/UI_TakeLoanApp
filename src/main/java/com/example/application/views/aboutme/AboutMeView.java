@@ -40,7 +40,8 @@ public class AboutMeView extends HorizontalLayout  {
                         "\n\nnie będę wynieniał czego prakuje, bo to była by dość długa lista. " +
                         "\n\nDlatego skupię się na tym że osoba praktycznie bez doświadczenia (czyt. ja) napisała" +
                         "\n\naplikację w któej działają usługid, zapisuje dane do bazy/usuwa/modyfikuje/ i ma grontend" +
-                        "\n\nktóry potafi pobrać dane z bazy i wyświetlić w frmie tabeli, jak na mnie to naprawdę sporo.\n\n\n");
+                        "\n\nktóry potafi pobrać dane z bazy i wyświetlić w frmie tabeli, jak na mnie to naprawdę sporo." +
+                        "\n\nktóry potafi pobrać dane z bazy i wyświetlić w frmie tabeli, jak na mnie to naprawdę sporo.\n\n\n\n");
         Paragraph signature = new Paragraph("Adam Piętka");
 
         setSizeFull();
