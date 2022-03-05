@@ -1,12 +1,10 @@
 package com.example.application.views.customers;
 
 import java.util.Optional;
-
 import com.example.application.data.dto.CustomerDTO;
 import com.example.application.data.entity.Customer;
 import com.example.application.data.service.RestClientService;
 import com.example.application.data.service.SamplePersonService;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasStyle;
@@ -26,7 +24,6 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.PageTitle;
@@ -38,7 +35,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.icon.Icon;
 
-@PageTitle("Customers")
+@PageTitle("Customers of MyBank")
 @Route(value = "customers/:samplePersonID?/:action?(edit)", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
 @Uses(Icon.class)
@@ -171,12 +168,14 @@ public class CustomersView extends Div implements BeforeEnterObserver {
         filtrByPesel.setPlaceholder("Filter by PESEL");
         filtrByPesel.setClearButtonVisible(true);
         filtrByPesel.setValueChangeMode(ValueChangeMode.EAGER);
+        filtrByName.addValueChangeListener(e -> update());
 
-        filtrByIdNumber.setPlaceholder("Filter by PESEL");
+        filtrByIdNumber.setPlaceholder("Filter by ID Number");
         filtrByIdNumber.setClearButtonVisible(true);
         filtrByIdNumber.setValueChangeMode(ValueChangeMode.EAGER);
 
-        horizontalLayout.add(filtrByName, filtrBySurname, filtrByPesel, filtrByIdNumber);
+//        horizontalLayout.add(filtrByName, filtrBySurname, filtrByPesel, filtrByIdNumber);
+        horizontalLayout.add(filtrByName, filtrBySurname, filtrByPesel);
         add(horizontalLayout);
 
     }
@@ -241,6 +240,9 @@ public class CustomersView extends Div implements BeforeEnterObserver {
     private void populateForm(Customer value) {
         this.customer = value;
         binder.readBean(this.customer);
+    }
 
+    private void update(){
+        postsGrid.setItems(service.getCustomersByPesel(filtrByName.getValue()));
     }
 }
